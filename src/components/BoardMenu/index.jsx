@@ -197,14 +197,13 @@ export const BoardMenu = () => {
         </div>
       </div>
 
-      <Modal size="lg" show={show} onHide={() => setShow(false)}>
+      <Modal  show={show} onHide={() => setShow(false)}>
         <Modal.Header className="modal-css" closeButton>
           <Modal.Title>Add club</Modal.Title>
         </Modal.Header>
         <Modal.Body className="modal-css modal-body ">
           <input className="form_input" type="text" placeholder="Club name" />
           <input className="form_input" type="text" placeholder="Number" />
-          <input className="form_input" type="text" placeholder="Test" />
         </Modal.Body>
         <Modal.Footer className="modal-css">
           <button
