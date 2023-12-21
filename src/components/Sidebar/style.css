@@ -1,0 +1,46 @@
+.sidebar {
+  width: 15%;
+  background-color: black;
+  color: white;
+  padding: 15px 0;
+  transition: 0.3s;
+}
+
+.logo {
+  text-align: center;
+  font-size: 24px;
+  cursor: pointer;
+  font-family: Preahvihear;
+  color: gold;
+  text-shadow: #FC0 5px 0 30px;
+}
+
+.menu{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+.menu-button{
+    width: 90%;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 16px;
+    letter-spacing:0.5px;
+    transition: 0.1s;
+    
+}
+.menu-button:hover{
+    cursor: pointer;
+    background-color: #343541;
+}
+.link{
+  color: white;
+  text-decoration: none;
+}
+.active{
+  text-decoration: none;
+  color: #FC0;
+  text-shadow: #FC0 2px 0 10px;
+}
