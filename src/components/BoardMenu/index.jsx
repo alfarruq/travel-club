@@ -36,8 +36,7 @@ export const BoardMenu = () => {
         <h2>Clubs</h2>
         <div className="  cardd-title">
           <h3 className="namee"> Club Name</h3>
-          <div>
-          </div>
+          <div></div>
         </div>
         <div className="cardd">
           <h3 className="name"> Club Name</h3>
@@ -197,7 +196,7 @@ export const BoardMenu = () => {
         </div>
       </div>
 
-      <Modal  show={show} onHide={() => setShow(false)}>
+      <Modal show={show} onHide={() => setShow(false)}>
         <Modal.Header className="modal-css" closeButton>
           <Modal.Title>Add club</Modal.Title>
         </Modal.Header>

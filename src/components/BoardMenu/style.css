@@ -1,9 +1,7 @@
 .board-menu-header {
   display: flex;
   gap: 30px;
-  /* background-color: aqua; */
-  padding-bottom: 20px;
-  border-bottom: 2px solid rgb(132, 130, 130);
+  padding-bottom: 12px;
 }
 
 .button {
@@ -75,10 +73,6 @@ svg path:hover {
   position: relative;
 }
 
-.get_datas h2 {
-  margin: 20px 0;
-  letter-spacing: 1px;
-}
 .cardd-title {
   background-color: black;
   height: 60px;
@@ -99,7 +93,7 @@ svg path:hover {
 .wrapper-btn {
   width: 120px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: center;
   /* background-color: antiquewhite; */
 }
