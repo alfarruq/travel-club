@@ -1,10 +1,72 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../BoardMenu/style.css";
-import './style.css'
+import "./style.css";
 import Modal from "react-bootstrap/Modal";
 
 export const MemberMenu = () => {
   const [show, setShow] = useState(false);
+
+  const [formData, setFormData] = useState();
+  const [data, setData] = useState([
+    {
+      id: 1,
+      name: "Jon",
+      email: "murodjon1@gmail.com",
+      number: "12345678",
+      nickname: "nickname",
+      date: "2023-12-20",
+    },
+  ]);
+
+  // Inputlarga kiritish o'zgarishlarini qabul qilish uchun funksiya
+  const handleInputChange = (e) => {
+    // Holatni yangi kiritilgan qiymat bilan yangilash
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  //  POST DATA B datalarni serverga yuborish  uchun funksiya
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Forma ma'lumotlarini qanday qilib ishlatish (masalan, ulani serverga yuborish)
+    try {
+      const response = await fetch("https:/murodjonning/local/linki", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+      } else console.error("Error sending data");
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+    setShow(false);
+    setFormData();
+  };
+
+  // GET Data
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("https://murodjonning/local/linki");
+
+      if (response.ok) {
+        const data_response = await response.json();
+        setData(...data, ...data_response);
+      } else console.error("Error fetching data");
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+  };
+
   return (
     <div>
       <div className="board-menu-header">
@@ -39,137 +101,129 @@ export const MemberMenu = () => {
           <div></div>
         </div>
         <div className="cardd">
-          <div className="table-member-header" >
+          <div className="table-member-header">
             <h3 className="name"> Member Name</h3>
             <h3 className="name"> Date </h3>
             <h3 className="name"> Email </h3>
             <h3 className="name"> Number </h3>
             <h3 className="name"> Nickname</h3>
           </div>
-          <div className="wrapper-btn">
-            <button className="icon-btn">
-              <svg
-                width="28px"
-                height="28px"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                stroke="#848282"
-                stroke-width="0.36"
-                transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)"
-              >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke="#CCCCCC"
-                  stroke-width="0.048"
-                ></g>
-                <g id="SVGRepo_iconCarrier">
-                  {" "}
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z"
-                    fill="#848282"
-                  ></path>{" "}
-                </g>
-              </svg>
-            </button>
-            <button className="icon-btn">
-              <svg
-                width="28px"
-                height="28px"
-                fill="#848282"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path d="M22,5H17V2a1,1,0,0,0-1-1H8A1,1,0,0,0,7,2V5H2A1,1,0,0,0,2,7H3.117L5.008,22.124A1,1,0,0,0,6,23H18a1,1,0,0,0,.992-.876L20.883,7H22a1,1,0,0,0,0-2ZM9,3h6V5H9Zm8.117,18H6.883L5.133,7H18.867Z"></path>
-                </g>
-              </svg>
-            </button>
-          </div>
+          <div className="wrapper-btn">Action</div>
         </div>
-        <div className="cardd">
-          <div className="table-member-header" >
-            <h3 className="name"> Farrux</h3>
-            <h3 className="name"> 10.20.2023</h3>
-            <h3 className="name"> mengboyevfarrux@gmail.com</h3>
-            <h3 className="name"> 998931101101</h3>
-            <h3 className="name">alfarruq</h3>
-          </div>
-          <div className="wrapper-btn">
-            <button className="icon-btn">
-              <svg
-                width="28px"
-                height="28px"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                stroke="#848282"
-                stroke-width="0.36"
-                transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)"
-              >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke="#CCCCCC"
-                  stroke-width="0.048"
-                ></g>
-                <g id="SVGRepo_iconCarrier">
-                  {" "}
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z"
+        {data.map((value) => {
+          return (
+            <div className="cardd">
+              <div className="table-member-header">
+                <h3 className="name"> {value?.name}</h3>
+                <h3 className="name">{value?.date}</h3>
+                <h3 className="name"> {value?.email}</h3>
+                <h3 className="name"> {value?.number}</h3>
+                <h3 className="name">{value?.nickname}</h3>
+              </div>
+              <div className="wrapper-btn">
+                <button className="icon-btn">
+                  <svg
+                    width="28px"
+                    height="28px"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    stroke="#848282"
+                    stroke-width="0.36"
+                    transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke="#CCCCCC"
+                      stroke-width="0.048"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      {" "}
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z"
+                        fill="#848282"
+                      ></path>{" "}
+                    </g>
+                  </svg>
+                </button>
+                <button className="icon-btn">
+                  <svg
+                    width="28px"
+                    height="28px"
                     fill="#848282"
-                  ></path>{" "}
-                </g>
-              </svg>
-            </button>
-            <button className="icon-btn">
-              <svg
-                width="28px"
-                height="28px"
-                fill="#848282"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path d="M22,5H17V2a1,1,0,0,0-1-1H8A1,1,0,0,0,7,2V5H2A1,1,0,0,0,2,7H3.117L5.008,22.124A1,1,0,0,0,6,23H18a1,1,0,0,0,.992-.876L20.883,7H22a1,1,0,0,0,0-2ZM9,3h6V5H9Zm8.117,18H6.883L5.133,7H18.867Z"></path>
-                </g>
-              </svg>
-            </button>
-          </div>
-        </div>
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path d="M22,5H17V2a1,1,0,0,0-1-1H8A1,1,0,0,0,7,2V5H2A1,1,0,0,0,2,7H3.117L5.008,22.124A1,1,0,0,0,6,23H18a1,1,0,0,0,.992-.876L20.883,7H22a1,1,0,0,0,0-2ZM9,3h6V5H9Zm8.117,18H6.883L5.133,7H18.867Z"></path>
+                    </g>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <Modal show={show} onHide={() => setShow(false)}>
         <Modal.Header className="modal-css" closeButton>
           <Modal.Title>Add member</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="modal-css modal-body ">
-          <input className="form_input" type="text" placeholder="email" />
-          <input className="form_input" type="text" placeholder="name" />
-          <input className="form_input" type="text" placeholder="number" />
-          <input className="form_input" type="text" placeholder="nickname" />
-          <input
-            type="date"
-            className="form_input"
-            placeholder="birthfay(dd.mm.yyyy)"
-          />
+        <Modal.Body className="modal-css">
+          <form className=" modal-body " onSubmit={handleSubmit}>
+            <input
+              onChange={handleInputChange}
+              value={formData?.email}
+              name="email"
+              className="form_input"
+              type="text"
+              placeholder="email"
+            />
+            <input
+              onChange={handleInputChange}
+              value={formData?.name}
+              name="name"
+              className="form_input"
+              type="text"
+              placeholder="name"
+            />
+            <input
+              onChange={handleInputChange}
+              value={formData?.number}
+              name="number"
+              className="form_input"
+              type="text"
+              placeholder="number"
+            />
+            <input
+              onChange={handleInputChange}
+              value={formData?.nickname}
+              name="nickname"
+              className="form_input"
+              type="text"
+              placeholder="nickname"
+            />
+            <input
+              onChange={handleInputChange}
+              value={formData?.data}
+              name="data"
+              type="date"
+              className="form_input"
+              placeholder="birthfay(dd.mm.yyyy)"
+            />
+            <button className="button" variant="primary">
+              Add Member
+            </button>
+          </form>
         </Modal.Body>
         <Modal.Footer className="modal-css">
           <button
@@ -178,13 +232,6 @@ export const MemberMenu = () => {
             onClick={() => setShow(false)}
           >
             Close
-          </button>
-          <button
-            className="button"
-            variant="primary"
-            onClick={() => setShow(false)}
-          >
-            Save Club
           </button>
         </Modal.Footer>
       </Modal>
