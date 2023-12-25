@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "../BoardMenu/style.css";
 import "./style.css";
 import Modal from "react-bootstrap/Modal";

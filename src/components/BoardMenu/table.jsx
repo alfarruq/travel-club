@@ -35,7 +35,7 @@ export default function BasicTable({ update }) {
     setShow(false);
     try {
       const response = await fetch(
-        `http://localhost:8080/member?memberId=${deleted}`,
+        `http://localhost:8080/board?clubId=${deleted}`,
         {
           method: "DELETE",
           headers: {
@@ -66,7 +66,7 @@ export default function BasicTable({ update }) {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/member/all");
+      const response = await fetch("http://localhost:8080/board/all");
 
       if (response.ok) {
         const data = await response.json();
@@ -78,7 +78,7 @@ export default function BasicTable({ update }) {
   };
    //// EDIT DATA  ////////
    const [editData, setEditData] = useState({});
-   const [oldName, setOldName] = useState("");
+  //  const [oldName, setOldName] = useState("");
  
    const handleInputChange = (e) => {
      setEditData({
@@ -89,7 +89,7 @@ export default function BasicTable({ update }) {
  
    const handleShowEdit = (data) => {
      setShowEdit(true);
-     setOldName(data?.name);
+    //  setOldName(data?.name);
      setEditData(data)
    };
  
@@ -99,7 +99,7 @@ export default function BasicTable({ update }) {
  
      try {
        const response = await fetch(
-         `http://localhost:8080/member?email=${editData?.email}`,
+         `http://localhost:8080/board`,
          {
            method: "PUT", // or 'PATCH' depending on your API
            headers: {
@@ -122,26 +122,22 @@ export default function BasicTable({ update }) {
  
      // setIsLoading(false);
  };
-
   return (
     <TableContainer style={{ background: "none" }} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell style={{ color: "white" }}>
-              <h5>Name</h5>
+              <h5>Name </h5>
+            </TableCell>
+            <TableCell style={{ color: "white" }}>
+              <h5>Board ID </h5>
+            </TableCell>
+            <TableCell style={{ color: "white" }} align="left">
+              <h5>Member email</h5>
             </TableCell>
             <TableCell style={{ color: "white" }} align="left">
               <h5>Date</h5>
-            </TableCell>
-            <TableCell style={{ color: "white" }} align="left">
-              <h5>Email</h5>
-            </TableCell>
-            <TableCell style={{ color: "white" }} align="left">
-              <h5>Number</h5>
-            </TableCell>
-            <TableCell style={{ color: "white" }} align="left">
-              <h5>Nickname</h5>
             </TableCell>
             <TableCell
               style={{ color: "white", paddingRight: "30px" }}
@@ -154,31 +150,28 @@ export default function BasicTable({ update }) {
         <TableBody>
           {data.map((row) => (
             <TableRow
-              key={row.email}
+              key={row.clubId}
               style={{ color: "white" }}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell style={{ color: "white" }} component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell style={{ color: "white" }} align="left">
-                {row.birthDay}
+              <TableCell style={{ color: "white" }} component="th" scope="row">
+                {row.clubId}
               </TableCell>
               <TableCell style={{ color: "white" }} align="left">
-                {row.email}
+                {row.adminEmail}
               </TableCell>
               <TableCell style={{ color: "white" }} align="left">
-                {row.phoneNumber}
-              </TableCell>
-              <TableCell style={{ color: "white" }} align="left">
-                {row.nickName}
+                {row.createDate}
               </TableCell>
               <TableCell
                 style={{ color: "white", display: "flex", gap: "25px" }}
                 align="right"
               >
                 <DeleteIcon
-                  onClick={() => HandleShow(row?.email)}
+                  onClick={() => HandleShow(row?.clubId)}
                   style={{ cursor: "pointer" }}
                 />
                 <EditIcon
@@ -223,27 +216,11 @@ export default function BasicTable({ update }) {
             />
             <input
               onChange={handleInputChange}
-              defaultValue={editData?.phoneNumber}
-              name="phoneNumber"
+              defaultValue={editData?.adminEmail}
+              name="adminEmail"
               className="form_input"
               type="text"
-              placeholder="number"
-            />
-            <input
-              onChange={handleInputChange}
-              defaultValue={editData?.nickName}
-              name="nickName"
-              className="form_input"
-              type="text"
-              placeholder="nickname"
-            />
-            <input
-              onChange={handleInputChange}
-              defaultValue={editData?.birthDay}
-              name="birthDay"
-              type="date"
-              className="form_input"
-              placeholder="birthfay(dd.mm.yyyy)"
+              placeholder="Admin email"
             />
             <button className="button" variant="primary">
               Edit

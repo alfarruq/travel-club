@@ -32,7 +32,7 @@ export const home_path = [
     {
       id: 4,
       path: "/membership",
-      name: "Member Ship Menu",
+      name: "Membership Menu",
       hidden: false,
       Element: <MemberShipMenu/>,
       search: "?",

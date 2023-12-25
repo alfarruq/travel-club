@@ -128,6 +128,9 @@ const handleEdit = async (e) => {
               <h5> Name</h5>
             </TableCell>
             <TableCell style={{ color: "white" }} align="left">
+              <h5>Club id</h5>
+            </TableCell>
+            <TableCell style={{ color: "white" }} align="left">
               <h5>Intro</h5>
             </TableCell>
             <TableCell style={{ color: "white" }} align="left">
@@ -151,6 +154,9 @@ const handleEdit = async (e) => {
             >
               <TableCell style={{ color: "white" }} component="th" scope="row">
                 {row?.name}
+              </TableCell>
+              <TableCell style={{ color: "white" }} component="th" scope="row">
+                {row?.usid}
               </TableCell>
               <TableCell style={{ color: "white" }} align="left">
                 {row?.intro}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./style.css";
 import "./style.css";
 import Modal from "react-bootstrap/Modal";
@@ -22,7 +22,7 @@ export const MemberMenu = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/member", {
+      const response = await fetch("http://localhost:8080/board", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -35,6 +35,27 @@ export const MemberMenu = () => {
     }
     setShow(false);
     setFormData();
+  };
+
+  //////get select data
+  const [selectData, setSelectData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps, no-use-before-define
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/club/findAll");
+
+      if (response.ok) {
+        const data = await response.json();
+        setSelectData(data || []);
+      } else console.error("Error fetching data");
+    } catch (error) {
+      console.error("Network error:", error);
+    }
   };
 
   return (
@@ -50,45 +71,37 @@ export const MemberMenu = () => {
           </Modal.Header>
           <Modal.Body className="modal-css">
             <form className=" modal-body " onSubmit={handleSubmit}>
-              <input
+              <select
                 onChange={handleInputChange}
-                value={formData?.email || ""}
-                name="email"
+                name="clubId"
                 className="form_input"
                 type="text"
-                placeholder="email"
-              />
+                placeholder="Club ID"
+              >
+                <option> Club ID </option>
+                {selectData.map(({ usid = "oo", name = "00" }) => {
+                  return (
+                    <option value={usid} key={usid}>
+                      {name}
+                    </option>
+                  );
+                })}
+              </select>
               <input
                 onChange={handleInputChange}
                 value={formData?.name || ""}
                 name="name"
                 className="form_input"
                 type="text"
-                placeholder="name"
+                placeholder="Board name"
               />
               <input
                 onChange={handleInputChange}
-                value={formData?.number || ""}
-                name="phoneNumber"
+                value={formData?.adminEmail || ""}
+                name="adminEmail"
                 className="form_input"
                 type="text"
-                placeholder="number"
-              />
-              <input
-                onChange={handleInputChange}
-                value={formData?.nickName || ""}
-                name="nickName"
-                className="form_input"
-                type="text"
-                placeholder="nickname"
-              />
-              <input
-                onChange={handleInputChange}
-                value={formData?.birthDay || ""}
-                name="birthDay"
-                type="text"
-                className="form_input"
-                placeholder="birthfay(dd.mm.yyyy)"
+                placeholder="Admin email"
               />
               <button className="button" variant="primary">
                 Add Board

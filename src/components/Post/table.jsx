@@ -14,7 +14,7 @@ import { useState } from "react";
 import { ModalBody } from "react-bootstrap";
 
 
-export default function BasicTable({ update }) {
+export default function BasicTable({ boardId,update }) {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
 
@@ -29,13 +29,14 @@ export default function BasicTable({ update }) {
   const [refetch, setReFetch] = useState(false);
   const HandleShow = (id) => {
     setShow(true);
-    setDeleted(id);
+    setDeleted(id.usid);
+    // console.log(id);
   };
   const handleDelete = async () => {
     setShow(false);
     try {
       const response = await fetch(
-        `http://localhost:8080/member?memberId=${deleted}`,
+        `http://localhost:8080/post?postingId=${deleted}`,
         {
           method: "DELETE",
           headers: {
@@ -46,7 +47,6 @@ export default function BasicTable({ update }) {
       );
 
       if (response.ok) {
-        // setDeleted(true);
       } else {
         console.error("Failed to delete data:", response.statusText);
       }
@@ -56,17 +56,20 @@ export default function BasicTable({ update }) {
     setReFetch(!refetch);
   };
 
+
+
+
   //   GET DATA //////////////////////////
   const [data, setData] = useState([]);
 
   React.useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps, no-use-before-define
-  }, [update, refetch]);
+  }, [update, refetch,boardId]);
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/member/all");
+      const response = await fetch(`http://localhost:8080/post?boardId=${boardId||''}`);
 
       if (response.ok) {
         const data = await response.json();
@@ -99,7 +102,7 @@ export default function BasicTable({ update }) {
  
      try {
        const response = await fetch(
-         `http://localhost:8080/member?email=${editData?.email}`,
+         `http://localhost:8080/post`,
          {
            method: "PUT", // or 'PATCH' depending on your API
            headers: {
@@ -129,19 +132,19 @@ export default function BasicTable({ update }) {
         <TableHead>
           <TableRow>
             <TableCell style={{ color: "white" }}>
-              <h5>Name</h5>
+              <h5>title</h5>
             </TableCell>
             <TableCell style={{ color: "white" }} align="left">
-              <h5>Date</h5>
+              <h5>contents</h5>
             </TableCell>
             <TableCell style={{ color: "white" }} align="left">
-              <h5>Email</h5>
+              <h5>W Email</h5>
             </TableCell>
             <TableCell style={{ color: "white" }} align="left">
-              <h5>Number</h5>
+              <h5>writtenDate</h5>
             </TableCell>
             <TableCell style={{ color: "white" }} align="left">
-              <h5>Nickname</h5>
+              <h5>readCount</h5>
             </TableCell>
             <TableCell
               style={{ color: "white", paddingRight: "30px" }}
@@ -154,31 +157,31 @@ export default function BasicTable({ update }) {
         <TableBody>
           {data.map((row) => (
             <TableRow
-              key={row.email}
+              key={row.title}
               style={{ color: "white" }}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell style={{ color: "white" }} component="th" scope="row">
-                {row.name}
+                {row.title}
               </TableCell>
               <TableCell style={{ color: "white" }} align="left">
-                {row.birthDay}
+                {row.contents}
               </TableCell>
               <TableCell style={{ color: "white" }} align="left">
-                {row.email}
+                {row.writerEmail}
               </TableCell>
               <TableCell style={{ color: "white" }} align="left">
-                {row.phoneNumber}
+                {row.writtenDate}
               </TableCell>
               <TableCell style={{ color: "white" }} align="left">
-                {row.nickName}
+                {row.readCount}
               </TableCell>
               <TableCell
                 style={{ color: "white", display: "flex", gap: "25px" }}
                 align="right"
               >
                 <DeleteIcon
-                  onClick={() => HandleShow(row?.email)}
+                  onClick={() => HandleShow(row)}
                   style={{ cursor: "pointer" }}
                 />
                 <EditIcon
@@ -215,36 +218,21 @@ export default function BasicTable({ update }) {
           <form onSubmit={handleEdit} className=" modal-body ">
             <input
               onChange={handleInputChange}
-              defaultValue={editData?.name}
-              name="name"
+              defaultValue={editData?.title}
+              name="title"
               className="form_input"
               type="text"
-              placeholder="name"
+              placeholder="title"
             />
             <input
               onChange={handleInputChange}
-              defaultValue={editData?.phoneNumber}
-              name="phoneNumber"
+              defaultValue={editData?.contents}
+              name="contents"
               className="form_input"
               type="text"
-              placeholder="number"
+              placeholder="contents"
             />
-            <input
-              onChange={handleInputChange}
-              defaultValue={editData?.nickName}
-              name="nickName"
-              className="form_input"
-              type="text"
-              placeholder="nickname"
-            />
-            <input
-              onChange={handleInputChange}
-              defaultValue={editData?.birthDay}
-              name="birthDay"
-              type="date"
-              className="form_input"
-              placeholder="birthfay(dd.mm.yyyy)"
-            />
+           
             <button className="button" variant="primary">
               Edit
             </button>

@@ -13,8 +13,7 @@ import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
 import { ModalBody } from "react-bootstrap";
 
-
-export default function BasicTable({ update }) {
+export default function BasicTable({ dataMembers }) {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
 
@@ -22,7 +21,6 @@ export default function BasicTable({ update }) {
     setShow(false);
     setShowEdit(false);
   };
-
 
   //////   DELETE   //////////////////////////
   const [deleted, setDeleted] = useState();
@@ -35,7 +33,7 @@ export default function BasicTable({ update }) {
     setShow(false);
     try {
       const response = await fetch(
-        `http://localhost:8080/member?memberId=${deleted}`,
+        `http://localhost:8080/club/membership?clubId=${deleted?.clubId}&memberId=${deleted?.memberEmail}`,
         {
           method: "DELETE",
           headers: {
@@ -56,72 +54,52 @@ export default function BasicTable({ update }) {
     setReFetch(!refetch);
   };
 
-  //   GET DATA //////////////////////////
-  const [data, setData] = useState([]);
+  //// EDIT DATA  ////////
+  const [editData, setEditData] = useState({});
+  const [oldName, setOldName] = useState(true);
 
-  React.useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps, no-use-before-define
-  }, [update, refetch]);
+  const handleInputChange = (e) => {
+    setEditData({
+      ...editData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  const fetchData = async () => {
+  const handleShowEdit = (data) => {
+    setShowEdit(true);
+    setOldName(!oldName);
+    setEditData(data);
+  };
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    setShowEdit(false);
+
     try {
-      const response = await fetch("http://localhost:8080/member/all");
+      const response = await fetch(
+        `http://localhost:8080/club/membership?clubId=${editData?.clubId}`,
+        {
+          method: "PUT", // or 'PATCH' depending on your API
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editData),
+        }
+      );
 
       if (response.ok) {
-        const data = await response.json();
-        setData(data || []);
-      } else console.error("Error fetching data");
+        console.log("Data updated successfully");
+        // Optionally, you can fetch updated data after a successful edit
+        //  fetchData();
+      } else {
+        console.error("Error updating data:", response.status);
+      }
     } catch (error) {
-      console.error("Network error:", error);
+      console.error("Error updating data:", error);
     }
+
+    // setIsLoading(false);
   };
-   //// EDIT DATA  ////////
-   const [editData, setEditData] = useState({});
-   const [oldName, setOldName] = useState(true);
- 
-   const handleInputChange = (e) => {
-     setEditData({
-       ...editData,
-       [e.target.name]: e.target.value,
-     });
-   };
- 
-   const handleShowEdit = (data) => {
-     setShowEdit(true);
-     setOldName(!oldName);
-     setEditData(data)
-   };
- 
- const handleEdit = async (e) => {
-     e.preventDefault();
-     setShowEdit(false);
- 
-     try {
-       const response = await fetch(
-         `http://localhost:8080/member?email=${editData?.email}`,
-         {
-           method: "PUT", // or 'PATCH' depending on your API
-           headers: {
-             "Content-Type": "application/json",
-           },
-           body: JSON.stringify(editData),
-         }
-       );
- 
-       if (response.ok) {
-         console.log("Data updated successfully");
-         // Optionally, you can fetch updated data after a successful edit
-         fetchData();
-       } else {
-         console.error("Error updating data:", response.status);
-       }
-     } catch (error) {
-       console.error("Error updating data:", error);
-     }
- 
-     // setIsLoading(false);
- };
 
   return (
     <TableContainer style={{ background: "none" }} component={Paper}>
@@ -129,7 +107,7 @@ export default function BasicTable({ update }) {
         <TableHead>
           <TableRow>
             <TableCell style={{ color: "white" }}>
-              <h5>Name</h5>
+              <h5>Member Name</h5>
             </TableCell>
             <TableCell style={{ color: "white" }} align="left">
               <h5>Date</h5>
@@ -138,10 +116,7 @@ export default function BasicTable({ update }) {
               <h5>Email</h5>
             </TableCell>
             <TableCell style={{ color: "white" }} align="left">
-              <h5>Number</h5>
-            </TableCell>
-            <TableCell style={{ color: "white" }} align="left">
-              <h5>Nickname</h5>
+              <h5>Role</h5>
             </TableCell>
             <TableCell
               style={{ color: "white", paddingRight: "30px" }}
@@ -152,37 +127,34 @@ export default function BasicTable({ update }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {dataMembers?.map((row) => (
             <TableRow
-              key={row.email}
+              key={row?.memberEmail}
               style={{ color: "white" }}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell style={{ color: "white" }} component="th" scope="row">
-                {row.name}
+                {row?.memberName}
               </TableCell>
               <TableCell style={{ color: "white" }} align="left">
-                {row.birthDay}
+                {row?.joinDate}
               </TableCell>
               <TableCell style={{ color: "white" }} align="left">
-                {row.email}
+                {row?.memberEmail}
               </TableCell>
               <TableCell style={{ color: "white" }} align="left">
-                {row.phoneNumber}
-              </TableCell>
-              <TableCell style={{ color: "white" }} align="left">
-                {row.nickName}
+                {row?.role}
               </TableCell>
               <TableCell
                 style={{ color: "white", display: "flex", gap: "25px" }}
                 align="right"
               >
                 <DeleteIcon
-                  onClick={() => HandleShow(row?.email)}
+                  onClick={() => HandleShow(row)}
                   style={{ cursor: "pointer" }}
                 />
                 <EditIcon
-                  onClick={()=>handleShowEdit(row)}
+                  onClick={() => handleShowEdit(row)}
                   style={{ cursor: "pointer" }}
                 />
               </TableCell>
@@ -213,38 +185,18 @@ export default function BasicTable({ update }) {
         </Modal.Header>
         <ModalBody className="modal-css">
           <form onSubmit={handleEdit} className=" modal-body ">
-            <input
+            <select
               onChange={handleInputChange}
-              defaultValue={editData?.name}
-              name="name"
+              // value={formData?.role || ""}
+              name="role"
               className="form_input"
               type="text"
-              placeholder="name"
-            />
-            <input
-              onChange={handleInputChange}
-              defaultValue={editData?.phoneNumber}
-              name="phoneNumber"
-              className="form_input"
-              type="text"
-              placeholder="number"
-            />
-            <input
-              onChange={handleInputChange}
-              defaultValue={editData?.nickName}
-              name="nickName"
-              className="form_input"
-              type="text"
-              placeholder="nickname"
-            />
-            <input
-              onChange={handleInputChange}
-              defaultValue={editData?.birthDay}
-              name="birthDay"
-              type="date"
-              className="form_input"
-              placeholder="birthfay(dd.mm.yyyy)"
-            />
+              placeholder="Role"
+            >
+              <option value=""> Role </option>
+              <option value="PRESIDENT"> PRESIDENT </option>
+              <option value="MEMBER"> MEMBER </option>
+            </select>
             <button className="button" variant="primary">
               Edit
             </button>
