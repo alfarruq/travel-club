@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
-import "../BoardMenu/style.css";
+import {  useState } from "react";
+import "./style.css";
 import "./style.css";
 import Modal from "react-bootstrap/Modal";
 import BasicTable from "./table";
 import SearchIcon from "@mui/icons-material/Search";
 
-export const MemberMenu = () => {
+export const MemberShipMenu = () => {
   const [show, setShow] = useState(false);
 
-  const [formData, setFormData] = useState();
-  // const [data, setData] = useState([ ]);
+  const [formData, setFormData] = useState()
 
   // Inputlarga kiritish o'zgarishlarini qabul qilish uchun funksiya
   const handleInputChange = (e) => {
-    // Holatni yangi kiritilgan qiymat bilan yangilash
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
-
   //  POST DATA datalarni serverga yuborish  uchun funksiya
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,17 +37,16 @@ export const MemberMenu = () => {
     setFormData();
   };
 
-
   return (
     <div>
       <div className="board-menu-header">
         <button className="button" onClick={() => setShow(true)}>
-          Add member
+          Add member ship
         </button>
         {/* ADD DATA MODAL */}
         <Modal show={show} onHide={() => setShow(false)}>
           <Modal.Header className="modal-css" closeButton>
-            <Modal.Title>Add member</Modal.Title>
+            <Modal.Title>Add member ship</Modal.Title>
           </Modal.Header>
           <Modal.Body className="modal-css">
             <form className=" modal-body " onSubmit={handleSubmit}>
@@ -90,12 +86,12 @@ export const MemberMenu = () => {
                 onChange={handleInputChange}
                 value={formData?.birthDay|| ''}
                 name="birthDay"
-                type="date"
+                type="text"
                 className="form_input"
                 placeholder="birthfay(dd.mm.yyyy)"
               />
               <button className="button" variant="primary">
-                Add Member
+                Add Member Ship
               </button>
             </form>
           </Modal.Body>
@@ -123,4 +119,4 @@ export const MemberMenu = () => {
   );
 };
 
-export default MemberMenu;
+export default MemberShipMenu;

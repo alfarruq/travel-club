@@ -1,6 +1,8 @@
 import BoardMenu from "../components/BoardMenu";
 import ClubMenu from "../components/ClubMenu";
 import MemberMenu from "../components/MemberMenu";
+import MemberShipMenu from "../components/MemberShip";
+import Post from "../components/Post";
 
 export const home_path = [
     {
@@ -25,6 +27,22 @@ export const home_path = [
       name: "Board Menu",
       hidden: false,
       Element: <BoardMenu/>,
+      search: "?",
+    },
+    {
+      id: 4,
+      path: "/membership",
+      name: "Member Ship Menu",
+      hidden: false,
+      Element: <MemberShipMenu/>,
+      search: "?",
+    },
+    {
+      id: 5,
+      path: "/post",
+      name: "Post",
+      hidden: false,
+      Element: <Post/>,
       search: "?",
     },
 ];
