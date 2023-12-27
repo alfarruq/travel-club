@@ -20,14 +20,20 @@ export const Post = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/post?boardId=${formData?.boardId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `http://localhost:8080/post?boardId=${formData?.boardId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
-      } else console.error("Error sending data");
+      } else {
+        const errorData = await response.json();
+        alert(`${errorData?.message}`);
+      }
     } catch (error) {
       console.error("Network error:", error);
     }
@@ -55,7 +61,6 @@ export const Post = () => {
       console.error("Network error:", error);
     }
   };
-  
 
   const [search, setSearch] = useState();
 
@@ -129,14 +134,19 @@ export const Post = () => {
         </Modal>
 
         <div className="wrapper_input">
-          <input className="search_input" onChange={(e)=>setSearch(e.target.value)}  type="text" placeholder="Search" />
+          <input
+            className="search_input"
+            onChange={(e) => setSearch(e.target.value)}
+            type="text"
+            placeholder="Search"
+          />
           <button className="search_button">
             <SearchIcon />
           </button>
         </div>
       </div>
 
-      <BasicTable  boardId={search}  update={show} />
+      <BasicTable boardId={search} update={show} />
     </div>
   );
 };

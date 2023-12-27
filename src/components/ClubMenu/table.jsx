@@ -13,7 +13,37 @@ import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
 import { ModalBody } from "react-bootstrap";
 
-export default function ClubTable({ update }) {
+export default function ClubTable({ search, update }) {
+  //////////////////// SEARCH//////////////////////
+  const [data, setData] = useState([]);
+  const [searchData, setSearchData] = useState([]);
+
+  function getDataIsSearch() {
+    if (search) {
+      return handleSearch();
+    } else return fetchData();
+  }
+
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/club/find?name=${search}`
+      );
+      const data = await response.json();
+      setSearchData(data);
+      if (response.ok) {
+        setData([...data]);
+      } else {
+        const errorData = await response.json();
+        alert(`${errorData?.message}`);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+    }
+  };
+  /////////////////////////////////////////////////////////////
+
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [refetch, setReFetch] = useState(false);
@@ -24,12 +54,14 @@ export default function ClubTable({ update }) {
   };
 
   //   GET DATA //////////////////////////
-  const [data, setData] = useState([]);
 
   React.useEffect(() => {
-    fetchData();
+    getDataIsSearch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [update, refetch]);
+  }, [update, refetch, search]);
+  // if (search) {
+  //   console.log('succsses');
+  // }else console.log('error');
 
   const fetchData = async () => {
     try {
@@ -43,6 +75,8 @@ export default function ClubTable({ update }) {
       console.error("Network error:", error);
     }
   };
+  ///// GET SEARCH DATA
+
   //////   DELETE   //////////////////////////
   const [deleted, setDeleted] = useState();
   const HandleShow = (id) => {
@@ -63,7 +97,6 @@ export default function ClubTable({ update }) {
       );
 
       if (response.ok) {
-        // setDeleted(true);
       } else {
         console.error("Failed to delete data:", response.statusText);
       }
@@ -89,7 +122,7 @@ export default function ClubTable({ update }) {
     setOldName(data?.name);
   };
 
-const handleEdit = async (e) => {
+  const handleEdit = async (e) => {
     e.preventDefault();
     setShowEdit(false);
 
@@ -117,8 +150,9 @@ const handleEdit = async (e) => {
     }
 
     // setIsLoading(false);
-};
-
+  };
+  // setData(searchData)
+  console.log('data ', [searchData]);
   return (
     <TableContainer style={{ background: "none" }} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -146,7 +180,7 @@ const handleEdit = async (e) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {(search ? [searchData] : data).map((row) => (
             <TableRow
               key={row.usid}
               style={{ color: "white" }}
@@ -179,6 +213,39 @@ const handleEdit = async (e) => {
               </TableCell>
             </TableRow>
           ))}
+          {/* {[...searchData].map((row) => (
+            <TableRow
+              key={row.usid}
+              style={{ color: "white" }}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell style={{ color: "white" }} component="th" scope="row">
+                {row?.name}
+              </TableCell>
+              <TableCell style={{ color: "white" }} component="th" scope="row">
+                {row?.usid}
+              </TableCell>
+              <TableCell style={{ color: "white" }} align="left">
+                {row?.intro}
+              </TableCell>
+              <TableCell style={{ color: "white" }} align="left">
+                {row?.foundationDay}
+              </TableCell>
+              <TableCell
+                style={{ color: "white", display: "flex", gap: "25px" }}
+                align="right"
+              >
+                <DeleteIcon
+                  onClick={() => HandleShow(row?.usid)}
+                  style={{ cursor: "pointer" }}
+                />
+                <EditIcon
+                  onClick={() => handleShowEdit(row)}
+                  style={{ cursor: "pointer" }}
+                />
+              </TableCell>
+            </TableRow>
+          ))} */}
         </TableBody>
       </Table>
 

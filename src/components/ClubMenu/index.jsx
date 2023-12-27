@@ -1,16 +1,15 @@
-import {  useState } from "react";
+import React, { useState } from "react";
 import "../BoardMenu/style.css";
 import "./style.css";
 import Modal from "react-bootstrap/Modal";
 import SearchIcon from "@mui/icons-material/Search";
 import ClubTable from "./table";
-
+// import SearcgData from "./search";
+// i
 
 export const ClubMenu = () => {
   const [show, setShow] = useState(false);
 
-  
-  
   const [formData, setFormData] = useState();
   // Inputlarga kiritish o'zgarishlarini qabul qilish uchun funksiya
   const handleInputChange = (e) => {
@@ -24,7 +23,6 @@ export const ClubMenu = () => {
   //  POST DATA datalarni serverga yuborish  uchun funksiya
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Forma ma'lumotlarini qanday qilib ishlatish (masalan, ulani serverga yuborish)
     try {
       const response = await fetch("http://localhost:8080/club/create", {
         method: "POST",
@@ -33,17 +31,24 @@ export const ClubMenu = () => {
       });
 
       if (response.ok) {
-      } else console.error("Error sending data");
+      } else {
+        const errorData = await response.json();
+        alert(`${errorData?.message}`);
+      }
     } catch (error) {
       console.error("Network error:", error);
     }
     setShow(false);
     setFormData();
   };
+  //// SEARCH DATA
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchUrl, setSearchUrl] = useState("");
+  const handleSubmitSearch = (e) => {
+    e.preventDefault()
+    setSearchUrl(searchTerm)
 
-  // GET Data
-
- 
+  };
 
   return (
     <div>
@@ -89,14 +94,21 @@ export const ClubMenu = () => {
         </Modal>
 
         <div className="wrapper_input">
-          <input className="search_input" type="text" placeholder="Search" />
-          <button className="search_button">
-            <SearchIcon />
-          </button>
+          <form action="" onSubmit={handleSubmitSearch}>
+            <input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search_input"
+              type="text"
+              placeholder="Search"
+            />
+            <button type="submit" className="search_button">
+              <SearchIcon />
+            </button>
+          </form>
         </div>
       </div>
-
-      <ClubTable  update={show} />
+      <ClubTable update={show} search={searchUrl} />
     </div>
   );
 };

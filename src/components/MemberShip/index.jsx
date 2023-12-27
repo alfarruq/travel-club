@@ -50,14 +50,16 @@ export const MemberShipMenu = () => {
       });
 
       if (response.ok) {
-      } else console.error("Error sending data");
+      } else {
+        const errorData = await response.json();
+        alert(`${errorData?.message}`);
+      }
     } catch (error) {
       console.error("Network error:", error);
     }
     setShow(false);
     setFormData();
   };
-  console.log(selectData[index]?.membershipList);
   return (
     <div>
       <div className="board-menu-header">
@@ -148,7 +150,11 @@ export const MemberShipMenu = () => {
       </div>
 
       <BasicTable
-        dataMembers={selectData[index]?.membershipList.length !== 0 ? selectData[index]?.membershipList : null}
+        dataMembers={
+          selectData[index]?.membershipList.length !== 0
+            ? selectData[index]?.membershipList
+            : null
+        }
       />
     </div>
   );

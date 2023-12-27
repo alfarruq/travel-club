@@ -32,7 +32,10 @@ export const MemberMenu = () => {
       });
 
       if (response.ok) {
-      } else console.error("Error sending data");
+      } else {
+        const errorData = await response.json();
+        alert(`${errorData?.message}`);
+      }
     } catch (error) {
       console.error("Network error:", error);
     }
@@ -56,7 +59,7 @@ export const MemberMenu = () => {
             <form className=" modal-body " onSubmit={handleSubmit}>
               <input
                 onChange={handleInputChange}
-                value={formData?.email|| ''}
+                value={formData?.email || ""}
                 name="email"
                 className="form_input"
                 type="text"
@@ -64,7 +67,7 @@ export const MemberMenu = () => {
               />
               <input
                 onChange={handleInputChange}
-                value={formData?.name|| ''}
+                value={formData?.name || ""}
                 name="name"
                 className="form_input"
                 type="text"
@@ -72,7 +75,7 @@ export const MemberMenu = () => {
               />
               <input
                 onChange={handleInputChange}
-                value={formData?.number|| ''}
+                value={formData?.number || ""}
                 name="phoneNumber"
                 className="form_input"
                 type="text"
@@ -80,7 +83,7 @@ export const MemberMenu = () => {
               />
               <input
                 onChange={handleInputChange}
-                value={formData?.nickName|| ''}
+                value={formData?.nickName || ""}
                 name="nickName"
                 className="form_input"
                 type="text"
@@ -88,7 +91,7 @@ export const MemberMenu = () => {
               />
               <input
                 onChange={handleInputChange}
-                value={formData?.birthDay|| ''}
+                value={formData?.birthDay || ""}
                 name="birthDay"
                 type="date"
                 className="form_input"
@@ -118,7 +121,7 @@ export const MemberMenu = () => {
         </div>
       </div>
 
-      <BasicTable  update={show} />
+      <BasicTable update={show} />
     </div>
   );
 };

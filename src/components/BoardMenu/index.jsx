@@ -29,7 +29,11 @@ export const MemberMenu = () => {
       });
 
       if (response.ok) {
-      } else console.error("Error sending data");
+      } else {
+        const errorData = await response.json();
+        alert(`${errorData?.message}`);
+        // console.log(errorData);
+      }
     } catch (error) {
       console.error("Network error:", error);
     }
@@ -52,7 +56,11 @@ export const MemberMenu = () => {
       if (response.ok) {
         const data = await response.json();
         setSelectData(data || []);
-      } else console.error("Error fetching data");
+      } else {
+        const errorData = await response.json();
+        // alert(`${errorData?.message}`);
+        console.log(errorData);
+      }
     } catch (error) {
       console.error("Network error:", error);
     }
