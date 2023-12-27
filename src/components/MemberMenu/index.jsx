@@ -43,6 +43,14 @@ export const MemberMenu = () => {
     setFormData();
   };
 
+    //// SEARCH DATA
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchUrl, setSearchUrl] = useState("");
+    const handleSubmitSearch = (e) => {
+      e.preventDefault()
+      setSearchUrl(searchTerm)
+  
+    };
 
   return (
     <div>
@@ -114,14 +122,22 @@ export const MemberMenu = () => {
         </Modal>
 
         <div className="wrapper_input">
-          <input className="search_input" type="text" placeholder="Search" />
-          <button className="search_button">
-            <SearchIcon />
-          </button>
+          <form action="" onSubmit={handleSubmitSearch}>
+            <input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search_input"
+              type="text"
+              placeholder="Search"
+            />
+            <button type="submit" className="search_button">
+              <SearchIcon />
+            </button>
+          </form>
         </div>
       </div>
 
-      <BasicTable update={show} />
+      <BasicTable update={show} search={searchUrl} />
     </div>
   );
 };

@@ -59,9 +59,7 @@ export default function ClubTable({ search, update }) {
     getDataIsSearch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [update, refetch, search]);
-  // if (search) {
-  //   console.log('succsses');
-  // }else console.log('error');
+
 
   const fetchData = async () => {
     try {
@@ -152,7 +150,7 @@ export default function ClubTable({ search, update }) {
     // setIsLoading(false);
   };
   // setData(searchData)
-  console.log('data ', [searchData]);
+ 
   return (
     <TableContainer style={{ background: "none" }} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

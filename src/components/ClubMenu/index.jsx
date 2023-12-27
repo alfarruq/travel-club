@@ -4,8 +4,7 @@ import "./style.css";
 import Modal from "react-bootstrap/Modal";
 import SearchIcon from "@mui/icons-material/Search";
 import ClubTable from "./table";
-// import SearcgData from "./search";
-// i
+
 
 export const ClubMenu = () => {
   const [show, setShow] = useState(false);

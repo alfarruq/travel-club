@@ -14,13 +14,39 @@ import { useState } from "react";
 import { ModalBody } from "react-bootstrap";
 
 
-export default function BasicTable({ update }) {
+export default function BasicTable({ update,search }) {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
 
   const handleClose = () => {
     setShow(false);
     setShowEdit(false);
+  };
+  const [searchData, setSearchData] = useState([]);
+
+  function getDataIsSearch() {
+    if (search) {
+      return handleSearch();
+    } else return fetchData();
+  }
+
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/club/find?name=${search}`
+      );
+      const data = await response.json();
+      setSearchData(data);
+      if (response.ok) {
+        setData([...data]);
+      } else {
+        const errorData = await response.json();
+        alert(`${errorData?.message}`);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+    }
   };
 
 
@@ -60,9 +86,9 @@ export default function BasicTable({ update }) {
   const [data, setData] = useState([]);
 
   React.useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps, no-use-before-define
-  }, [update, refetch]);
+    getDataIsSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [update, refetch, search]);
 
   const fetchData = async () => {
     try {
@@ -150,7 +176,7 @@ export default function BasicTable({ update }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {(search ? [searchData] : data).map((row) => (
             <TableRow
               key={row.email}
               style={{ color: "white" }}
